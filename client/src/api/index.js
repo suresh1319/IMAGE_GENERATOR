@@ -1,56 +1,49 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8080/api';
+// Get API URL from environment or use default for local development
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080/api';
 
-// Get API key from environment
-const API_KEY = process.env.REACT_APP_STABILITY_API_KEY;
+// Use environment variable for API key
+const API_KEY = process.env.REACT_APP_API_KEY;
 
 const api = axios.create({
     baseURL: API_URL,
     headers: {
         'Content-Type': 'application/json',
-        'x-api-key': API_KEY
+        'x-api-key': API_KEY || '', // fallback to empty string if undefined
     }
 });
 
-// Add response interceptor for error handling
+// Response interceptor for error handling
 api.interceptors.response.use(
-    response => {
-        return response;
-    },
+    response => response,
     error => {
-        const errorMessage = error.response?.data?.message || error.message;
-        console.error('API Error:', errorMessage);
-        throw new Error(errorMessage);
+        const message =
+            error?.response?.data?.message ||
+            error?.message ||
+            'Error while using API';
+        return Promise.reject(new Error(message));
     }
 );
 
+// GET /posts
 export const GetPosts = async () => {
-    try {
-        const response = await api.get('/posts');
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
+    const response = await api.get('/posts');
+    return response.data;
 };
 
+// POST /posts
 export const CreatePost = async (data) => {
-    try {
-        const response = await api.post('/posts', data);
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
+    const response = await api.post('/posts', data);
+    return response.data;
 };
 
+// POST /generateImage
 export const GenerateAIImage = async (data) => {
-    try {
-        const response = await api.post('/generateImage', data);
-        if (!response.data?.photo) {
-            throw new Error('No image data received from server');
-        }
-        return response.data;
-    } catch (error) {
-        throw error;
+    const response = await api.post('/generateImage', data);
+    if (!response.data?.photo) {
+        throw new Error('No image data received from server');
     }
+    return response.data;
 };
+//suresh

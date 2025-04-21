@@ -4,7 +4,7 @@ import { createError } from '../error.js';
 
 dotenv.config();
 
-const STABILITY_API_URL = "https://api.stability.ai/v1/generation/stable-diffusion-xl-1024-v1-0/text-to-image";
+const STABILITY_API_URL = "https://api.stability.ai/v1/generation/stable-diffusion-v1-5/text-to-image";
 
 export const generateImage = async (req, res, next) => {
     try {
@@ -58,11 +58,6 @@ export const generateImage = async (req, res, next) => {
             photo: imageUrl
         });
     } catch (error) {
-        console.error("Image Generation Error:", {
-            message: error.message,
-            response: error.response?.data
-        });
-        
         const errorMessage = error.response?.data?.message || error.message;
         next(createError(500, `Failed to generate image: ${errorMessage}`));
     }

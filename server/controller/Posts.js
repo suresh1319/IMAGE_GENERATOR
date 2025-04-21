@@ -5,7 +5,6 @@ import { createError } from '../error.js';
 
 dotenv.config();
 
-// Verify Cloudinary configuration
 const configureCloudinary = () => {
     try {
         cloudinary.config({
@@ -13,17 +12,7 @@ const configureCloudinary = () => {
             api_key: process.env.CLOUDINARY_API_KEY,
             api_secret: process.env.CLOUDINARY_API_SECRET
         });
-
-        // Test the configuration
-        cloudinary.api.ping((error, result) => {
-            if (error) {
-                console.error('Cloudinary configuration error:', error);
-            } else {
-                console.log('Cloudinary configured successfully');
-            }
-        });
     } catch (error) {
-        console.error('Error configuring Cloudinary:', error);
         throw error;
     }
 };
@@ -38,7 +27,6 @@ export const getAllPosts = async (req, res, next) => {
             data: posts,
         });
     } catch (error) {
-        console.error('Error fetching posts:', error);
         next(createError(500, "Failed to fetch posts. Please try again later."));
     }
 };
@@ -86,11 +74,9 @@ export const createPost = async (req, res, next) => {
                 data: newPost 
             });
         } catch (uploadError) {
-            console.error('Error uploading to Cloudinary:', uploadError);
             return next(createError(500, "Failed to upload image. Please try again."));
         }
     } catch (error) {
-        console.error('Error in createPost:', error);
         next(createError(500, "Server error. Please try again later."));
     }
 };
