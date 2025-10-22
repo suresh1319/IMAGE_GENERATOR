@@ -15,15 +15,7 @@ app.use(express.urlencoded({extended: true}));
 // API key validation middleware
 const validateApiKey = (req, res, next) => {
     const apiKey = req.headers['x-api-key'];
-    console.log("Received x-api-key:", apiKey);
-    console.log("Expected STABILITY_API_KEY:", process.env.STABILITY_API_KEY);
-    console.log("NODE_ENV:", process.env.NODE_ENV);
     
-    // Always allow requests to proceed for debugging
-    return next();
-
-    // Comment out the original validation logic for now
-    /*
     // Skip validation in development mode or if API key matches
     if (process.env.NODE_ENV === 'development' || apiKey === process.env.STABILITY_API_KEY) {
         return next();
@@ -33,7 +25,6 @@ const validateApiKey = (req, res, next) => {
         success: false,
         message: 'Invalid or missing API key'
     });
-    */
 };
 
 // Apply API key validation to routes
@@ -65,8 +56,6 @@ const connectDB = async () => {
         }
 
         const options = {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
             serverSelectionTimeoutMS: 5000,
             socketTimeoutMS: 45000,
         };

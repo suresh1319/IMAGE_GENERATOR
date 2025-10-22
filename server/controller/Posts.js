@@ -46,6 +46,11 @@ export const createPost = async (req, res, next) => {
         }
 
         try {
+            // Validate Cloudinary configuration
+            if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
+                return next(createError(500, "Cloudinary configuration missing"));
+            }
+
             // Generate a unique public_id based on prompt and timestamp
             const timestamp = new Date().getTime();
             const sanitizedPrompt = prompt.toLowerCase().replace(/[^a-z0-9]/g, '_').substring(0, 40);
@@ -74,7 +79,8 @@ export const createPost = async (req, res, next) => {
                 data: newPost 
             });
         } catch (uploadError) {
-            return next(createError(500, "Failed to upload image. Please try again."));
+            console.error('Upload error:', uploadError);
+            return next(createError(500, `Failed to upload image: ${uploadError.message}`));
         }
     } catch (error) {
         next(createError(500, "Server error. Please try again later."));
