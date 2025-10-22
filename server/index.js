@@ -47,6 +47,15 @@ app.get('/',(req,res)=>{
     })
 })
 
+app.get('/debug/env',(req,res)=>{
+    res.status(200).json({
+        mongodb_configured: !!process.env.MONGODB_URL,
+        stability_configured: !!process.env.STABILITY_API_KEY && process.env.STABILITY_API_KEY !== 'your-api-key-here',
+        node_env: process.env.NODE_ENV,
+        port: process.env.PORT
+    })
+})
+
 const connectDB = async () => {
     try {
         mongoose.set("strictQuery", true);

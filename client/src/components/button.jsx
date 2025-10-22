@@ -2,7 +2,9 @@ import { CircularProgress } from "@mui/material";
 import React from "react";
 import styled from "styled-components";
 
-const Button = styled.div`
+const Button = styled.div.withConfig({
+  shouldForwardProp: (prop) => !['isDisabled', 'isLoading', 'flex', 'type'].includes(prop)
+})`
   border-radius: 10px;
   color: white;
   font-size: 14px;
