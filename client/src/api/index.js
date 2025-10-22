@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-// Get API URL from environment or use default for local development
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080/api';
+// Get API URL from environment or use default for deployed backend
+const API_URL = process.env.REACT_APP_API_URL || 'https://image-generator-elnl.onrender.com/api';
 
 // Use environment variable for API key
 const API_KEY = process.env.REACT_APP_API_KEY;
